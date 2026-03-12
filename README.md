@@ -1,39 +1,75 @@
 # micrograd-from-scratch
 
-This repository contains an educational implementation of a tiny automatic differentiation engine, built while following the lecture:
+An educational implementation of a scalar-based automatic differentiation engine built from first principles to deeply understand backpropagation and neural network training.
 
-“The spelled-out intro to neural networks and backpropagation: building micrograd”
-by Andrej Karpathy.
+This project reconstructs the core mechanics behind modern deep learning frameworks by implementing:
 
-The goal of this project is not performance, but understanding how backpropagation and neural network training work at a fundamental level.
+* A dynamic computation graph
+* Forward propagation
+* Manual backpropagation using the chain rule
+* Gradient accumulation across graph nodes
+* Parameter updates via gradient descent
 
-### What this is
+Unlike framework-level abstractions, this implementation exposes every intermediate step of gradient computation.
 
-- A scalar-based autograd engine
-- A minimal computation graph with forward and backward passes
-- Manual implementation of backpropagation using the chain rule
-- Built step-by-step for learning purposes
+---
 
-This mirrors the ideas behind modern frameworks like PyTorch, but without tensors or optimizations.
+## Architecture Overview
 
-### What I learned
+The engine is built around:
 
-- Neural networks are just mathematical expressions
-- Backpropagation is systematic application of the chain rule
-- Gradients represent sensitivity of the output with respect to inputs
-- .backward() is not magic, it’s just graph traversal + local derivatives
+* A `Value` class representing scalar nodes in a computation graph
+* Operator overloading to dynamically construct the graph during forward execution
+* Explicit storage of parent nodes and local gradient functions
+* A topologically sorted backward pass for correct gradient propagation
 
-### Credit & Attribution
+Backpropagation is implemented as:
 
-This project is an educational reimplementation inspired by:
+1. Build the computation graph during the forward pass
+2. Perform reverse topological traversal of the graph
+3. Apply local derivatives using the chain rule
+4. Accumulate gradients at each node
 
-- Lecture: The spelled-out intro to neural networks and backpropagation
-- by Andrej Karpathy
-- Original micrograd repository: https://github.com/karpathy/micrograd
+This mirrors the conceptual foundation of PyTorch’s autograd engine, but implemented at scalar granularity for clarity and educational depth.
 
-All core ideas belong to the original author.
+---
 
-### Disclaimer
+## Key Learnings
 
-This code is for learning and exploration only.
-It is not intended for production use.
+* Neural networks reduce to composable mathematical expressions
+* Backpropagation is structured graph traversal, not "magic"
+* Gradients represent sensitivity propagation through dependencies
+* Correct backward implementation requires topological ordering
+* Automatic differentiation is fundamentally a graph problem
+
+---
+
+## Why This Project Matters
+
+Rebuilding autograd from scratch develops:
+
+* Deep understanding of gradient-based optimization
+* Strong intuition for computational graphs
+* Algorithmic thinking about dependency structures
+* Systems-level understanding of ML frameworks
+
+This project prioritizes conceptual correctness and clarity over performance.
+
+---
+
+## Attribution
+
+This implementation was developed while studying:
+
+**“The spelled-out intro to neural networks and backpropagation”**
+by Andrej Karpathy
+
+Original reference: [https://github.com/karpathy/micrograd](https://github.com/karpathy/micrograd)
+
+All foundational ideas belong to the original author. This is an independent educational reimplementation for learning purposes.
+
+---
+
+## Disclaimer
+
+This code is intended for educational exploration only and is not optimized for production use.
